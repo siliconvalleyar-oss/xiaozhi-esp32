@@ -1,3 +1,8 @@
+---
+name: xiaozhi-mqtt-udp
+description: MQTT+UDP hybrid communication protocol
+---
+
 # XiaoZhi MQTT + UDP Hybrid Communication Protocol
 
 This skill covers the dual-channel protocol: MQTT for control, UDP for real-time audio.

@@ -1,3 +1,8 @@
+---
+name: xiaozhi-code-style
+description: C++ code style guide using clang-format
+---
+
 # XiaoZhi Code Style Guide
 
 This skill covers the coding standards for the XiaoZhi ESP32 project.

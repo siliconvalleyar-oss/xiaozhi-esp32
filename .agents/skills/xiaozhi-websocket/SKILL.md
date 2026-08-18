@@ -1,3 +1,8 @@
+---
+name: xiaozhi-websocket
+description: WebSocket communication protocol
+---
+
 # XiaoZhi WebSocket Communication Protocol
 
 This skill covers the WebSocket protocol between the device and server.

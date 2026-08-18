@@ -1,3 +1,8 @@
+---
+name: xiaozhi-blufi
+description: BluFi BLE-based WiFi provisioning for XiaoZhi
+---
+
 # XiaoZhi BluFi Provisioning
 
 This skill covers BluFi (BLE-based WiFi provisioning) in the XiaoZhi firmware.

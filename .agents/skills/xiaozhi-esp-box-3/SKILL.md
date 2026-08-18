@@ -1,3 +1,8 @@
+---
+name: xiaozhi-esp-box-3
+description: ESP-BOX-3 board setup and configuration
+---
+
 # XiaoZhi ESP-BOX-3 Board Guide
 
 This skill covers the Espressif ESP-BOX-3 AIoT development kit setup for XiaoZhi AI.

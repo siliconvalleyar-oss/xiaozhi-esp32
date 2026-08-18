@@ -1,3 +1,8 @@
+---
+name: xiaozhi-mcp-protocol
+description: MCP protocol interaction flow and wire format
+---
+
 # XiaoZhi MCP Protocol Interaction Flow
 
 This skill covers the MCP (Model Context Protocol) wire protocol between the backend API (MCP client) and the ESP32 device (MCP server).

@@ -1,3 +1,8 @@
+---
+name: xiaozhi-partitions
+description: V2 partition table layout and configuration
+---
+
 # XiaoZhi V2 Partition Table
 
 This skill covers the v2 partition layout and its improvements over v1.

@@ -1,3 +1,8 @@
+---
+name: xiaozhi-architecture
+description: Full XiaoZhi ESP32 project architecture overview
+---
+
 # XiaoZhi ESP32 — Full Architecture Overview
 
 This skill provides a comprehensive overview of the XiaoZhi AI chatbot project architecture.

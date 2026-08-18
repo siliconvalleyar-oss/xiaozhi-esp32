@@ -1,3 +1,8 @@
+---
+name: xiaozhi-mcp-usage
+description: MCP IoT control tool registration and usage
+---
+
 # XiaoZhi MCP IoT Control Usage
 
 This skill covers how to implement IoT control for ESP32 devices using the MCP (Model Context Protocol).

@@ -1,3 +1,8 @@
+---
+name: xiaozhi-board-dev
+description: Custom board development guide for XiaoZhi AI
+---
+
 # XiaoZhi Custom Board Development
 
 This skill guides you through adding a new board to the XiaoZhi AI voice assistant project.
