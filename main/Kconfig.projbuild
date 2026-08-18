@@ -143,6 +143,9 @@ choice BOARD_TYPE
     config BOARD_TYPE_BREAD_COMPACT_ESP32_LCD
         bool "Bread Compact ESP32 DevKit + LCD (面包板)"
         depends on IDF_TARGET_ESP32
+    config BOARD_TYPE_INMP441_BREAD_S3
+        bool "INMP441 Breadboard S3 (INMP441 + MAX98357 + OLED)"
+        depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_XMINI_C3_V3
         bool "Xmini C3 V3"
         depends on IDF_TARGET_ESP32C3

@@ -1,0 +1,21 @@
+{
+    "target": "esp32s3",
+    "builds": [
+        {
+            "name": "inmp441-bread-s3",
+            "sdkconfig_append": [
+                "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+                "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/v2/8m.csv\"",
+                "CONFIG_LANGUAGE_ZH_CN=y"
+            ]
+        },
+        {
+            "name": "inmp441-bread-s3-en",
+            "sdkconfig_append": [
+                "CONFIG_ESPTOOLPY_FLASHSIZE_8MB=y",
+                "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/v2/8m.csv\"",
+                "CONFIG_LANGUAGE_EN_US=y"
+            ]
+        }
+    ]
+}
