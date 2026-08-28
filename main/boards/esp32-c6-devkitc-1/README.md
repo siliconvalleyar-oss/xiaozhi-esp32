@@ -44,6 +44,21 @@ A XiaoZhi AI chatbot board for the ESP32-C6-DevKitC-1.
 | SDA | I2C Data | GPIO2 |
 | SCL | I2C Clock | GPIO3 |
 
+### ESP32-C6-DevKitC-1 Pinout (Expansion Header)
+
+| Header Pin | GPIO | Function in this board |
+|------------|------|------------------------|
+| 1 | GPIO9 | Boot button (active low) |
+| 2 | GPIO8 | Built-in LED |
+| 3 | GPIO7 | — |
+| 4 | GPIO6 | — |
+| 5 | GPIO5 | INMP441 WS (I2S mic word select) |
+| 6 | GPIO4 | INMP441 SCK (I2S mic clock) |
+| 7 | GPIO3 | SSD1306 SCL (I2C clock) |
+| 8 | GPIO2 | SSD1306 SDA (I2C data) |
+| 9 | GPIO1 | — |
+| 10 | GPIO0 | — |
+
 ## Build
 
 ```bash
