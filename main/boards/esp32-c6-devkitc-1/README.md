@@ -29,9 +29,9 @@ A XiaoZhi AI chatbot board for the ESP32-C6-DevKitC-1.
 |---------------|----------|--------------|
 | VIN | Power | 5V or 3.3V |
 | GND | Ground | GND |
-| DIN | Serial Data In | GPIO7 |
-| BCLK | Bit Clock | GPIO10 |
-| LRC | Word Select | GPIO11 |
+| DIN | Serial Data In | GPIO20 |
+| BCLK | Bit Clock | GPIO18 |
+| LRC | Word Select | GPIO19 |
 | SD | Shutdown | 3.3V |
 | GAIN | Gain select | GND (15dB) |
 
