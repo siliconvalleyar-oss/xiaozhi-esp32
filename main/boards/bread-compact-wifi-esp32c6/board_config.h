@@ -7,15 +7,17 @@
  * ├──────────┬──────────┬───────────────────────────────────────┤
  * │  GPIO   │  Función │  Notas                                │
  * ├──────────┼──────────┼───────────────────────────────────────┤
- * │  GPIO6  │ I2C SDA  │  OLED SSD1306 (y otros dispositivos) │
- * │  GPIO7  │ I2C SCL  │  OLED SSD1306 (y otros dispositivos) │
- * │  GPIO9  │ BOOT BTN │  Activo en bajo, pull-up interno      │
- * │  GPIO18 │ LED RGB  │  WS2812 en algunas revisiones         │
+ * │  GPIO0   │ PWR MIC  │  INMP441 VDD  (HIGH = encendido)      │
+ * │  GPIO1   │ L/R MIC  │  INMP441 canal (HIGH = derecho)       │
+ * │  GPIO6   │ I2C SDA  │  OLED SSD1306 (y otros dispositivos) │
+ * │  GPIO7   │ I2C SCL  │  OLED SSD1306 (y otros dispositivos) │
+ * │  GPIO9   │ BOOT BTN │  Activo en bajo, pull-up interno      │
+ * │  GPIO10  │ I2S DOUT │  → MAX98357A DIN                     │
+ * │  GPIO20  │ I2S DIN  │  ← INMP441 SD                        │
+ * │  GPIO22  │ I2S BCLK │  Compartido: MAX98357A BCLK + INMP441 SCK │
+ * │  GPIO23  │ I2S WS   │  Compartido: MAX98357A LRC + INMP441 WS   │
  * ├──────────┼──────────┼───────────────────────────────────────┤
- * │  INMP441 I2S (COMENTADO — sin conectar)                    │
- * │  GPIO3  │ I2S SD   │  Datos de entrada del micrófono       │
- * │  GPIO4  │ I2S WS   │  Word Select (L/R clock)              │
- * │  GPIO5  │ I2S SCK  │  Bit Clock                            │
+ * │  LED     │ GPIO18   │  LED de estado (config.)             │
  * └──────────┴──────────┴───────────────────────────────────────┘
  *
  * PINES A EVITAR en ESP32-C6-DevKitC-1:
@@ -53,29 +55,19 @@
 #define BOARD_STATUS_LED_GPIO   18
 
 // ════════════════════════════════════════════════════════════════
-//  Micrófono I2S INMP441 — SIN CONECTAR
-//  ⚠  Estas definiciones están COMENTADAS porque el INMP441
-//     no está físicamente conectado al ESP32-C6-DevKitC-1.
-//  Para habilitar en el futuro:
-//    1. Conectar el INMP441 a los pines indicados.
-//    2. Descomentar CONFIG_USE_INMP441_MIC en esp32_c6_devkitc1.cc
-//    3. Descomentar las siguientes líneas.
+//  Audio I2S full-duplex (ESP32-C6 tiene 1 solo I2S)
+//  BCLK y WS son COMPARTIDOS entre el MAX98357A y el INMP441.
 // ════════════════════════════════════════════════════════════════
-// #define BOARD_INMP441_I2S_NUM     I2S_NUM_0
-// #define BOARD_INMP441_GPIO_SD     3     // GPIO3 — datos (DOUT del INMP441)
-// #define BOARD_INMP441_GPIO_WS     4     // GPIO4 — word select
-// #define BOARD_INMP441_GPIO_SCK    5     // GPIO5 — bit clock
-// #define BOARD_INMP441_SAMPLE_RATE 16000 // 16 kHz recomendado para reconocimiento
-// #define BOARD_INMP441_BITS        16    // 16 bits por muestra
-// #define BOARD_INMP441_MONO        true  // El INMP441 es mono
+#define BOARD_I2S_BCLK        GPIO_NUM_22   // MAX98357A BCLK + INMP441 SCK
+#define BOARD_I2S_WS          GPIO_NUM_23   // MAX98357A LRC + INMP441 WS
+#define BOARD_I2S_DOUT        GPIO_NUM_10   // → MAX98357A DIN
+#define BOARD_I2S_DIN         GPIO_NUM_20   // ← INMP441 SD
 
-// ════════════════════════════════════════════════════════════════
-//  Speaker / Amplificador — NO CONECTADO
-//  Comentar / habilitar si se agrega un amplificador I2S externo
-// ════════════════════════════════════════════════════════════════
-// #define BOARD_SPEAKER_BCLK        GPIO_NUM_NC
-// #define BOARD_SPEAKER_WS          GPIO_NUM_NC
-// #define BOARD_SPEAKER_DOUT        GPIO_NUM_NC
+// INMP441 — control por GPIO
+#define BOARD_MIC_POWER_PIN   GPIO_NUM_0    // VDD (HIGH = encendido)
+#define BOARD_MIC_LR_PIN      GPIO_NUM_1    // canal (HIGH = derecho)
+
+#define BOARD_AUDIO_SAMPLE_RATE 24000       // reloj I2S compartido (24 kHz)
 
 // ════════════════════════════════════════════════════════════════
 //  Identificación de placa

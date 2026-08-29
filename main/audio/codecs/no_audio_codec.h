@@ -20,7 +20,7 @@ public:
 
 class NoAudioCodecDuplex : public NoAudioCodec {
 public:
-    NoAudioCodecDuplex(int input_sample_rate, int output_sample_rate, gpio_num_t bclk, gpio_num_t ws, gpio_num_t dout, gpio_num_t din);
+    NoAudioCodecDuplex(int input_sample_rate, int output_sample_rate, gpio_num_t bclk, gpio_num_t ws, gpio_num_t dout, gpio_num_t din, i2s_std_slot_mask_t rx_slot_mask = I2S_STD_SLOT_LEFT);
 };
 
 class NoAudioCodecSimplex : public NoAudioCodec {

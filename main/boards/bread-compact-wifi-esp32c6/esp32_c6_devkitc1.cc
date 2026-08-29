@@ -15,9 +15,12 @@
 #include "button.h"
 #include "esp_log.h"
 #include "driver/i2c_master.h"
+#include "driver/gpio.h"
 #include "esp_lcd_panel_io.h"
 #include "esp_lcd_panel_ops.h"
 #include "esp_lcd_panel_vendor.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 #define TAG "ESP32C6DevKitC1"
 
@@ -28,6 +31,15 @@
 #define DISPLAY_I2C_ADDR    0x3C
 #define DISPLAY_WIDTH       128
 #define DISPLAY_HEIGHT      64
+
+// I2S full-duplex (el ESP32-C6 solo tiene 1 periférico I2S)
+// Comparten BCLK y WS entre el mic INMP441 y el parlante MAX98357A
+#define SPK_BCLK_PIN        GPIO_NUM_22   // → MAX98357A BCLK + INMP441 SCK
+#define SPK_WS_PIN          GPIO_NUM_23   // → MAX98357A LRC + INMP441 WS
+#define SPK_DOUT_PIN        GPIO_NUM_10   // → MAX98357A DIN
+#define SPK_DIN_PIN         GPIO_NUM_20   // ← INMP441 SD
+#define MIC_LR_PIN          GPIO_NUM_1    // → INMP441 L/R (canal derecho = HIGH)
+#define AUDIO_POWER_PIN     GPIO_NUM_0    // → INMP441 VDD (encendido por software)
 
 // Fuentes LVGL
 LV_FONT_DECLARE(font_puhui_14_1);
@@ -40,7 +52,6 @@ private:
     esp_lcd_panel_handle_t panel_ = nullptr;
     Display* display_ = nullptr;
     Button boot_button_;
-    NoAudioCodec audio_codec_;  // ← Agregar esta línea
 
     void InitializeI2c() {
         i2c_master_bus_config_t bus_cfg = {
@@ -115,9 +126,30 @@ public:
     }
 
     virtual AudioCodec* GetAudioCodec() override {
-      //  return &audio_codec_;
-      static NoAudioCodec codec;
-      return &codec;
+        // Encendido del INMP441 por GPIO: VDD = GPIO0 en HIGH
+        // y selección de canal L/R = GPIO1 en HIGH (canal derecho).
+        gpio_config_t io_conf = {};
+        io_conf.pin_bit_mask = (1ULL << AUDIO_POWER_PIN) | (1ULL << MIC_LR_PIN);
+        io_conf.mode = GPIO_MODE_OUTPUT;
+        io_conf.pull_up_en = GPIO_PULLUP_DISABLE;
+        io_conf.pull_down_en = GPIO_PULLDOWN_DISABLE;
+        io_conf.intr_type = GPIO_INTR_DISABLE;
+        ESP_ERROR_CHECK(gpio_config(&io_conf));
+        gpio_set_level(AUDIO_POWER_PIN, 1);
+        gpio_set_level(MIC_LR_PIN, 1);
+        vTaskDelay(pdMS_TO_TICKS(100));
+
+        // Full-duplex sobre I2S0: 24 kHz de reloj compartido.
+        // TX (MAX98357A) en slot LEFT; RX (INMP441) en slot RIGHT.
+        static NoAudioCodecDuplex codec(
+            24000, 24000,
+            SPK_BCLK_PIN,   // bclk
+            SPK_WS_PIN,     // ws
+            SPK_DOUT_PIN,   // dout → MAX98357A DIN
+            SPK_DIN_PIN,    // din  ← INMP441 SD
+            I2S_STD_SLOT_RIGHT
+        );
+        return &codec;
     }
 };
 

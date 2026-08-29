@@ -207,10 +207,9 @@ void Application::Alert(const char* status, const char* message, const char* emo
     display->SetStatus(status);
     display->SetEmotion(emotion);
     display->SetChatMessage("system", message);
-    // SONIDOS DESHABILITADOS
-    // if (!sound.empty()) {
-    //     audio_service_.PlaySound(sound);
-    // }
+    if (!sound.empty()) {
+        audio_service_.PlaySound(sound);
+    }
 }
 
 void Application::DismissAlert() {
@@ -329,10 +328,9 @@ void Application::Start() {
 
     display->SetChatMessage("system", SystemInfo::GetUserAgent().c_str());
 
-    // AUDIO SERVICE DESHABILITADO
-    // auto codec = board.GetAudioCodec();
-    // audio_service_.Initialize(codec);
-    // audio_service_.Start();
+    auto codec = board.GetAudioCodec();
+    audio_service_.Initialize(codec);
+    audio_service_.Start();
 
     AudioServiceCallbacks callbacks;
     callbacks.on_send_queue_available = [this]() {
@@ -494,7 +492,7 @@ void Application::Start() {
         std::string message = std::string(Lang::Strings::VERSION) + ota.GetCurrentVersion();
         display->ShowNotification(message.c_str());
         display->SetChatMessage("system", "");
-        // audio_service_.PlaySound(Lang::Sounds::OGG_SUCCESS);  // DESHABILITADO
+        audio_service_.PlaySound(Lang::Sounds::OGG_SUCCESS);
     }
 }
 
@@ -627,8 +625,8 @@ void Application::SetDeviceState(DeviceState state) {
         case kDeviceStateIdle:
             display->SetStatus(Lang::Strings::STANDBY);
             display->SetEmotion("neutral");
-          //  audio_service_.EnableVoiceProcessing(false);
-          //  audio_service_.EnableWakeWordDetection(true);
+            audio_service_.EnableVoiceProcessing(false);
+            audio_service_.EnableWakeWordDetection(true);
             break;
         case kDeviceStateConnecting:
             display->SetStatus(Lang::Strings::CONNECTING);
@@ -639,24 +637,24 @@ void Application::SetDeviceState(DeviceState state) {
             display->SetStatus(Lang::Strings::LISTENING);
             display->SetEmotion("neutral");
 
-          //  if (!audio_service_.IsAudioProcessorRunning()) {
-          //      protocol_->SendStartListening(listening_mode_);
-          //      audio_service_.EnableVoiceProcessing(true);
-          //      audio_service_.EnableWakeWordDetection(false);
-          //  }
+            if (!audio_service_.IsAudioProcessorRunning()) {
+                protocol_->SendStartListening(listening_mode_);
+                audio_service_.EnableVoiceProcessing(true);
+                audio_service_.EnableWakeWordDetection(false);
+            }
             break;
         case kDeviceStateSpeaking:
             display->SetStatus(Lang::Strings::SPEAKING);
 
             if (listening_mode_ != kListeningModeRealtime) {
-              //  audio_service_.EnableVoiceProcessing(false);
+                audio_service_.EnableVoiceProcessing(false);
 #if CONFIG_USE_AFE_WAKE_WORD
-              //  audio_service_.EnableWakeWordDetection(true);
+                audio_service_.EnableWakeWordDetection(true);
 #else
-            //    audio_service_.EnableWakeWordDetection(false);
+                audio_service_.EnableWakeWordDetection(false);
 #endif
             }
-          //  audio_service_.ResetDecoder();
+            audio_service_.ResetDecoder();
             break;
         default:
             break;
